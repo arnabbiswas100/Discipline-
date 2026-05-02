@@ -13,7 +13,7 @@ async function loadDashboard() {
 
   // Load streak stats
   try {
-    const stats = await apiFetch('/api/habits/stats/streak');
+    const stats = await apiFetch(`/api/habits/stats/streak?today=${today()}`);
     document.getElementById('stat-streak').textContent = stats.current_streak + ' days';
     document.getElementById('stat-best').textContent = stats.best_streak + ' days';
     document.getElementById('stat-good-days').textContent = stats.good_days;
@@ -79,8 +79,8 @@ function renderHeatmap(year) {
 
   // Build a column-per-week grid
   grid.innerHTML = '';
-  const start = new Date(`${year}-01-01`);
-  const end   = new Date(`${year}-12-31`);
+  const start = new Date(`${year}-01-01T00:00:00`); // local midnight, not UTC
+  const end   = new Date(`${year}-12-31T00:00:00`);
   const todayStr = today();
 
   // Pad to Monday

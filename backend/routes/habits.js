@@ -64,19 +64,32 @@ router.get('/stats/streak', async (req, res) => {
       ORDER BY date DESC
     `);
 
-    // Calculate current streak
+    // Calculate current streak using date strings (timezone-safe)
     let currentStreak = 0;
-    let today = new Date();
-    today.setHours(0, 0, 0, 0);
+
+    // Build today's date string from the client's perspective
+    // Use the query param if provided, otherwise server date
+    function dateToStr(d) {
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${y}-${m}-${day}`;
+    }
+    function addDays(isoStr, n) {
+      const d = new Date(isoStr + 'T12:00:00'); // noon avoids DST edge cases
+      d.setDate(d.getDate() + n);
+      return dateToStr(d);
+    }
+
+    const todayStr = req.query.today || dateToStr(new Date());
 
     for (let i = 0; i < rows.length; i++) {
-      const logDate = new Date(rows[i].date);
-      logDate.setHours(0, 0, 0, 0);
+      const logDateStr = rows[i].date instanceof Date
+        ? dateToStr(rows[i].date)
+        : rows[i].date.split('T')[0];
+      const expectedStr = addDays(todayStr, -i);
 
-      const expectedDate = new Date(today);
-      expectedDate.setDate(today.getDate() - i);
-
-      if (logDate.getTime() !== expectedDate.getTime()) break;
+      if (logDateStr !== expectedStr) break;
       if (rows[i].daily_percentage >= 70) {
         currentStreak++;
       } else {

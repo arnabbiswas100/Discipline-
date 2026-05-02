@@ -18,12 +18,16 @@ async function apiFetch(path, options = {}) {
   }
 }
 
-/* ── Date helpers ──────────────────────────────────────────────── */
+/* ── Date helpers (all local timezone) ─────────────────────────── */
 function toISO(date) {
   const d = date instanceof Date ? date : new Date(date);
-  return d.toISOString().split('T')[0];
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, '0');
+  const day = String(d.getDate()).padStart(2, '0');
+  return `${y}-${m}-${day}`;
 }
 function toDisplay(isoStr) {
+  // Parse as local midnight (not UTC) by appending T00:00:00 without Z
   const d = new Date(isoStr + 'T00:00:00');
   return d.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
 }
