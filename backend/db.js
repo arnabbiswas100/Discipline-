@@ -8,14 +8,9 @@ const pool = new Pool({
     : false,
 });
 
-// Test connection on startup
-pool.connect((err, client, release) => {
-  if (err) {
-    console.error('❌ Database connection error:', err.message);
-  } else {
-    console.log('✅ Connected to PostgreSQL');
-    release();
-  }
+// Log connection errors but NEVER crash the process
+pool.on('error', (err) => {
+  console.error('⚠️ Unexpected PostgreSQL pool error:', err.message);
 });
 
 module.exports = pool;

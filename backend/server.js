@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname, '../frontend')));
 app.use('/api/habits', habitsRouter);
 app.use('/api/milestones', milestonesRouter);
 
-// Health check
+// Health check — works even if DB is down
 app.get('/api/health', (req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });
 });
@@ -32,16 +32,18 @@ app.get('*', (req, res) => {
 });
 
 // ─── Start Server FIRST, then init DB ────────────────────────────────────────
-// Server must bind the port before anything else (critical for Render)
 app.listen(PORT, () => {
   console.log(`🚀 DISCIPLINE Dashboard running on port ${PORT}`);
-  initDB();
+  initDB().catch(err => {
+    console.error('❌ DB init failed (server still running):', err.message);
+  });
 });
 
 // ─── Initialize DB tables ─────────────────────────────────────────────────────
 async function initDB() {
-  const client = await pool.connect();
+  let client;
   try {
+    client = await pool.connect();
     await client.query(`
       CREATE TABLE IF NOT EXISTS habit_logs (
         id               SERIAL PRIMARY KEY,
@@ -84,6 +86,6 @@ async function initDB() {
   } catch (err) {
     console.error('❌ DB init error:', err.message);
   } finally {
-    client.release();
+    if (client) client.release();
   }
 }
