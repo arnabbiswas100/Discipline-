@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: discipline-dashboard
+    env: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: node server.js
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: discipline-db
+          property: connectionString
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+
+databases:
+  - name: discipline-db
+    plan: free
+    databaseName: discipline
+    user: discipline_user

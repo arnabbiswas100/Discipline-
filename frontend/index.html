@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>DISCIPLINE — Dashboard</title>
+  <meta name="description" content="Personal discipline habit tracking dashboard for Alnos Xen"/>
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-inner">
+    <span class="nav-logo">⚡ DISCIPLINE</span>
+    <div class="nav-links">
+      <a href="index.html"       class="nav-link active">🏠 <span>Dashboard</span></a>
+      <a href="log.html"         class="nav-link">✏️ <span>Log</span></a>
+      <a href="history.html"     class="nav-link">📅 <span>History</span></a>
+      <a href="milestones.html"  class="nav-link">🏆 <span>Wins</span></a>
+      <button id="theme-btn" class="theme-btn" title="Toggle theme">☀️</button>
+    </div>
+  </div>
+</nav>
+
+<main class="page">
+<div class="container">
+
+  <!-- Today Hero -->
+  <div class="today-hero card" id="today-hero">
+    <div>
+      <div class="today-date" id="today-date-label">Loading…</div>
+      <h1 class="today-heading" id="today-greeting">Good morning, Alnos 👋</h1>
+      <p class="today-quote">"Progress not Perfection"</p>
+    </div>
+    <div class="progress-ring-wrap">
+      <div class="ring-container">
+        <svg width="160" height="160" id="ring-svg">
+          <circle class="ring-bg" cx="80" cy="80" r="70"/>
+          <circle class="ring-fill" cx="80" cy="80" r="70"/>
+        </svg>
+        <div class="ring-text">
+          <div class="ring-pct" id="ring-pct">0%</div>
+          <div class="ring-sub">TODAY</div>
+        </div>
+      </div>
+      <a href="log.html" id="log-today-btn" class="btn btn-primary">✏️ Log Today</a>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-grid">
+    <div class="stat-card card">
+      <div class="stat-value green" id="stat-streak">—</div>
+      <div class="stat-label">🔥 Current Streak</div>
+    </div>
+    <div class="stat-card card">
+      <div class="stat-value gold" id="stat-best">—</div>
+      <div class="stat-label">🏆 Best Streak</div>
+    </div>
+    <div class="stat-card card">
+      <div class="stat-value" id="stat-month-avg">—</div>
+      <div class="stat-label">📈 This Month Avg</div>
+    </div>
+    <div class="stat-card card">
+      <div class="stat-value" id="stat-good-days">—</div>
+      <div class="stat-label">✅ Good Days (≥70%)</div>
+    </div>
+  </div>
+
+  <!-- Today Habits (read-only quick view) -->
+  <div class="mb-32">
+    <div class="section-title">Today's Habits</div>
+    <div class="habits-grid" id="habits-grid">
+      <!-- Rendered by JS -->
+    </div>
+  </div>
+
+  <!-- Yearly Heatmap -->
+  <div class="card" style="padding:28px">
+    <div class="heatmap-header">
+      <div class="section-title" style="margin:0">📊 Year Overview</div>
+      <div class="heatmap-year-nav">
+        <button id="year-prev">‹</button>
+        <span class="heatmap-year" id="year-label">2025</span>
+        <button id="year-next">›</button>
+      </div>
+    </div>
+    <div class="heatmap-months" id="heatmap-months"></div>
+    <div class="heatmap-grid" id="heatmap-grid"></div>
+    <div class="flex gap-16 mt-16" style="font-size:0.75rem;color:var(--text3)">
+      <span>Less</span>
+      <span style="width:12px;height:12px;border-radius:2px;background:var(--border);display:inline-block"></span>
+      <span style="width:12px;height:12px;border-radius:2px;background:rgba(239,68,68,0.4);display:inline-block"></span>
+      <span style="width:12px;height:12px;border-radius:2px;background:rgba(234,179,8,0.5);display:inline-block"></span>
+      <span style="width:12px;height:12px;border-radius:2px;background:rgba(34,197,94,0.5);display:inline-block"></span>
+      <span style="width:12px;height:12px;border-radius:2px;background:rgba(34,197,94,0.85);display:inline-block"></span>
+      <span>More</span>
+    </div>
+  </div>
+
+</div>
+</main>
+
+<div id="toast-container"></div>
+
+<script src="js/app.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
